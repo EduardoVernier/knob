@@ -25,9 +25,30 @@ namespace App
             this.mapping = new Dictionary<EventType, string>();
         }
 
+        public static string[] GetAvailableMappings()
+        {
+            string[] files = Directory.GetFiles("config");
+            List<String> mappings = new List<string>();
+            Regex mappingNameRegex = new Regex(@"^[\w\d_]+$");
+            foreach (string filename in files)
+            {
+                using (StreamReader sr = new StreamReader(filename))
+                {
+                    string line = sr.ReadLine();
+                    if (mappingNameRegex.IsMatch(line))
+                        mappings.Add(line);
+                }
+            }
+            return mappings.ToArray();
+        }
+
         private void LoadFromFile()
         {
             string path = @"config\";
+            if (AppName == null)
+            {
+                Console.WriteLine("AppName is not set. Can't read from file.\n");
+            }
             path += AppName.ToLower().Replace(' ', '_') + ".conf";
             if (File.Exists(path))
             {
@@ -60,7 +81,7 @@ namespace App
             }
             else
             {
-                // do nothing, it's the user creating a mapping.
+                throw new FileNotFoundException();
             }
         }
 
@@ -82,6 +103,7 @@ namespace App
             }
             using (StreamWriter sw = new StreamWriter(path))
             {
+                sw.WriteLine(this.AppName);
                 foreach (KeyValuePair<EventType, String> item in mapping)
                 {
                     sw.WriteLine("{0}={1}", item.Key.ToString(), item.Value);

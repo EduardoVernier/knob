@@ -27,8 +27,12 @@ namespace App
             buffer = new ConcurrentQueue<string>();
             SenderThread = new Thread(UseKeyBuffer);
             ReadThread = new Thread(ReadFromArduino);
-
-            currentMapping = new Mapping("Spotify");
+            Console.WriteLine("Available mappings:");
+            foreach (string s in Mapping.GetAvailableMappings())
+            {
+                Console.WriteLine(s);
+            }
+            Console.WriteLine("Endof available mappings");
         }
 
         private void UseKeyBuffer()

@@ -23,6 +23,7 @@ namespace App
         {
             this.AppName = appName;
             this.mapping = new Dictionary<EventType, string>();
+            this.Load();
         }
 
         public static string[] GetAvailableMappings()
@@ -42,7 +43,7 @@ namespace App
             return mappings.ToArray();
         }
 
-        private void LoadFromFile()
+        private void Load()
         {
             string path = @"config\";
             if (AppName == null)
@@ -54,6 +55,10 @@ namespace App
             {
                 using (StreamReader sr = new StreamReader(path))
                 {
+                    if (sr.ReadLine() != this.AppName)
+                    {
+                        throw new Exception("Inconsistent Mapping object.");
+                    }
                     while (!sr.EndOfStream)
                     {
                         string line = sr.ReadLine();

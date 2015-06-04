@@ -18,8 +18,14 @@ namespace App
         public static SerialPort sp = new SerialPort("COM3", 9600);
         Thread SenderThread;
         Thread ReadThread;
+        Thread InitThread;
+
         ConcurrentQueue<String> buffer;
         Mapping currentMapping;
+        StartingDialog dialog = new StartingDialog();
+
+        string[] mappings;
+
         public MainForm()
         {
             InitializeComponent();
@@ -27,12 +33,6 @@ namespace App
             buffer = new ConcurrentQueue<string>();
             SenderThread = new Thread(UseKeyBuffer);
             ReadThread = new Thread(ReadFromArduino);
-            Console.WriteLine("Available mappings:");
-            foreach (string s in Mapping.GetAvailableMappings())
-            {
-                Console.WriteLine(s);
-            }
-            Console.WriteLine("Endof available mappings");
         }
 
         private void UseKeyBuffer()
@@ -53,22 +53,73 @@ namespace App
             if (sp.IsOpen) sp.Close();
             base.OnClosing(e);
         }
+        private void ShowInitDialog()
+        {
+            dialog.ShowDialog();
+        }
 
         protected override void OnShown(EventArgs e)
         {
+            bool errorPort = false;
+            InitThread = new Thread(ShowInitDialog);
+            InitThread.Start();
+            dialog.LabelText = "Opening port...";
             try
             {
                 sp.Open();
+                dialog.Progress = 20;
+                Thread.Sleep(200);
             }
             catch (SystemException)
             {
                 Console.WriteLine("Error opening port.");
+                errorPort = true;
+                // dialog.Close();
             }
             if (sp.IsOpen)
             {
                 SenderThread.Start();
                 ReadThread.Start();
                 Console.WriteLine("Port COM3 is open.");
+                dialog.LabelText = "Port opened.";
+                dialog.Progress = 50;
+            }
+            Thread.Sleep(200);
+            if (dialog.Visible)
+            {
+                dialog.LabelText = "Loading mappings...";
+                dialog.Progress = 75;
+                mappings = Mapping.GetAvailableMappings();
+                Thread.Sleep(200);
+                dialog.LabelText = "Done!";
+                dialog.Progress = 100;
+                Thread.Sleep(500);
+                dialog.CallClose();
+            }
+            foreach (string s in mappings)
+            {
+                this.textBox1.Text += s + '\n';
+                
+            }
+            if (mappings.Length != 0)
+            {
+                currentMapping = new Mapping(mappings[0]);
+            }
+            if (errorPort)
+            {
+                while (MessageBox.Show("Error establishing Bluetooth connection. Retry?", "Error!", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+                {
+                    try
+                    {
+                        sp.Open();
+                    }
+                    catch (SystemException)
+                    {
+                        continue;
+                    }
+                    errorPort = false;
+                    break;
+                }
             }
             base.OnShown(e);
         }
@@ -81,10 +132,17 @@ namespace App
                 Console.WriteLine("Checking for incoming data....");
                 while (sp.BytesToRead > 0)
                 {
-                    EventType val = (EventType)sp.ReadByte();
-                    Console.WriteLine("Got value: {0}", val);
-                    string action = currentMapping.GetAction(val);
-                    if (action != null) buffer.Enqueue(action);
+                    try
+                    {
+                        EventType val = (EventType)Enum.Parse(typeof(EventType), sp.ReadByte().ToString());
+                        Console.WriteLine("Got value: {0}", val);
+                        string action = currentMapping.GetAction(val);
+                        if (action != null) buffer.Enqueue(action);
+                    }
+                    catch (ArgumentException)
+                    {
+                        continue;
+                    }
                 }
                 Application.DoEvents();
                 Thread.Sleep(1000);

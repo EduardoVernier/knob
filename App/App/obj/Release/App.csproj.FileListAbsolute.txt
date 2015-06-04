@@ -1,0 +1,8 @@
+C:\Users\Samsung\Documents\GitHub\knob\App\App\obj\Release\App.Form1.resources
+C:\Users\Samsung\Documents\GitHub\knob\App\App\obj\Release\App.csproj.GenerateResource.Cache
+C:\Users\Samsung\Documents\GitHub\knob\App\App\bin\Release\App.exe.config
+C:\Users\Samsung\Documents\GitHub\knob\App\App\bin\Release\App.exe
+C:\Users\Samsung\Documents\GitHub\knob\App\App\bin\Release\App.pdb
+C:\Users\Samsung\Documents\GitHub\knob\App\App\obj\Release\App.Properties.Resources.resources
+C:\Users\Samsung\Documents\GitHub\knob\App\App\obj\Release\App.exe
+C:\Users\Samsung\Documents\GitHub\knob\App\App\obj\Release\App.pdb

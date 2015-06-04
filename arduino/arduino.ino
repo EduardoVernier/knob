@@ -17,10 +17,9 @@ static boolean rotating=false;      // debounce management
 // interrupt service routine vars
 boolean A_set = false;              
 boolean B_set = false;
-
+boolean lastButtonState = HIGH;
 
 void setup() {
-
   pinMode(encoderPinA, INPUT_PULLUP); // new method of enabling pullups
   pinMode(encoderPinB, INPUT_PULLUP); 
   pinMode(clearButton, INPUT_PULLUP);
@@ -40,30 +39,41 @@ void setup() {
 // main loop, work is done by interrupt service routines, this one only prints stuff
 void loop() { 
   rotating = true;  // reset the debouncer
-
+  //Serial.print("t");
   if (lastReportedPos != encoderPos) {
-    Serial.print("Index:");
-    Serial.println(encoderPos, DEC);
+    //Serial.print("Index:");
+    //Serial.println(encoderPos, DEC);
     lastReportedPos = encoderPos;
   }
-  if (digitalRead(clearButton) == LOW )  {
-    encoderPos = 0;
+  if (digitalRead(clearButton) == LOW && lastButtonState == HIGH)  {
+    //encoderPos = 0;
+    Serial.print((char)1);
+    lastButtonState = LOW;
+    delay(1);
   }
+  else if (digitalRead(clearButton) == HIGH && lastButtonState == LOW)
+  {
+      Serial.print((char)4);
+      Serial.flush();
+      lastButtonState = HIGH;
+      delay(1);  
+  } 
+  
 }
 
 // Interrupt on A changing state
 void doEncoderA(){
   // debounce
   if ( rotating ) delay (1);  // wait a little until the bouncing is done
-
   // Test transition, did things really change? 
   if( digitalRead(encoderPinA) != A_set ) {  // debounce once more
     A_set = !A_set;
-
     // adjust counter + if A leads B
     if ( A_set && !B_set ) 
+    { 
       encoderPos += 1;
-
+      Serial.print((char)2);
+    }
     rotating = false;  // no more debouncing until loop() hits again
   }
 }
@@ -75,8 +85,10 @@ void doEncoderB(){
     B_set = !B_set;
     //  adjust counter - 1 if B leads A
     if( B_set && !A_set ) 
+    {
       encoderPos -= 1;
-
+      Serial.print((char)3);
+    }
     rotating = false;
   }
 }

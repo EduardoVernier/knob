@@ -49,12 +49,12 @@ namespace App
         static void Main()
         {
             ShowConsoleWindow();
+            EventType t = EventType.SINGLE_CLICK;
+            Console.WriteLine("{0}", t.ToString());
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Form1 f = new Form1();
-            Application.Run(f);
-            
-        
+            Application.Run(new MainForm());
+
         }
     }
 }

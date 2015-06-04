@@ -9,26 +9,26 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using System.Collections.Concurrent;
 
 namespace App
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
-        public const int SINGLE_CLICK = 4;
         public static SerialPort sp = new SerialPort("COM3", 9600);
-        delegate void Func();
         Thread SenderThread;
         Thread ReadThread;
-        List<string> buffer;
-        public Form1()
+        ConcurrentQueue<String> buffer;
+        Mapping currentMapping;
+        public MainForm()
         {
             InitializeComponent();
+
+            buffer = new ConcurrentQueue<string>();
             SenderThread = new Thread(UseKeyBuffer);
-            SenderThread.Start();
-            buffer = new List<string>();
             ReadThread = new Thread(ReadFromArduino);
-            ReadThread.Start();
+
+            currentMapping = new Mapping("Spotify");
         }
 
         private void UseKeyBuffer()
@@ -36,18 +36,22 @@ namespace App
             while (true)
             {
                 if (buffer.Count == 0) { Thread.Sleep(1000); continue; }
-                SendKeys.SendWait(buffer.ElementAt<String>(0));
-                buffer.RemoveAt(0);
+                string result;
+                if (buffer.TryDequeue(out result))
+                    SendKeys.SendWait(result);
                 Application.DoEvents();
                 Thread.Sleep(200);
             }
         }
 
-        Func func;
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if (sp.IsOpen) sp.Close();
+            base.OnClosing(e);
+        }
+
         protected override void OnShown(EventArgs e)
         {
-            base.OnShown(e);
-            func = ReadFromArduino;
             try
             {
                 sp.Open();
@@ -56,8 +60,13 @@ namespace App
             {
                 Console.WriteLine("Error opening port.");
             }
-            if (sp.IsOpen) Console.WriteLine("Port COM3 is open.");
-
+            if (sp.IsOpen)
+            {
+                SenderThread.Start();
+                ReadThread.Start();
+                Console.WriteLine("Port COM3 is open.");
+            }
+            base.OnShown(e);
         }
 
         private void ReadFromArduino()
@@ -68,18 +77,10 @@ namespace App
                 Console.WriteLine("Checking for incoming data....");
                 while (sp.BytesToRead > 0)
                 {
-                    
-                    int val = sp.ReadByte();
+                    EventType val = (EventType)sp.ReadByte();
                     Console.WriteLine("Got value: {0}", val);
-                    switch (val)
-                    {
-                        case SINGLE_CLICK:
-                            Console.WriteLine("GOTCLICK");
-                            buffer.Add(" ");
-                            break;
-                        default:
-                            break;
-                    }
+                    string action = currentMapping.GetAction(val);
+                    if (action != null) buffer.Enqueue(action);
                 }
                 Application.DoEvents();
                 Thread.Sleep(1000);

@@ -46,7 +46,7 @@
             this.ClientSize = new System.Drawing.Size(284, 262);
             this.Controls.Add(this.textBox1);
             this.Name = "MainForm";
-            this.Text = "Form1";
+            this.Text = "knob";
             this.ResumeLayout(false);
             this.PerformLayout();
 

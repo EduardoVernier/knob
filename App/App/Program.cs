@@ -49,8 +49,6 @@ namespace App
         static void Main()
         {
             ShowConsoleWindow();
-            EventType t = EventType.SINGLE_CLICK;
-            Console.WriteLine("{0}", t.ToString());
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());

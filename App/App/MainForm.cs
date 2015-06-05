@@ -64,17 +64,17 @@ namespace App
             InitThread = new Thread(ShowInitDialog);
             InitThread.Start();
             dialog.LabelText = "Opening port...";
+            Thread.Sleep(1000);
             try
             {
                 sp.Open();
                 dialog.Progress = 20;
-                Thread.Sleep(200);
             }
             catch (SystemException)
             {
-                Console.WriteLine("Error opening port.");
+                dialog.LabelText = "Error opening port!";
+                Thread.Sleep(1000);
                 errorPort = true;
-                // dialog.Close();
             }
             if (sp.IsOpen)
             {
@@ -84,16 +84,16 @@ namespace App
                 dialog.LabelText = "Port opened.";
                 dialog.Progress = 50;
             }
-            Thread.Sleep(200);
+            Thread.Sleep(1000);
             if (dialog.Visible)
             {
                 dialog.LabelText = "Loading mappings...";
                 dialog.Progress = 75;
                 mappings = Mapping.GetAvailableMappings();
-                Thread.Sleep(200);
+                Thread.Sleep(1000);
                 dialog.LabelText = "Done!";
                 dialog.Progress = 100;
-                Thread.Sleep(500);
+                Thread.Sleep(1000);
                 dialog.CallClose();
             }
             foreach (string s in mappings)
@@ -107,7 +107,8 @@ namespace App
             }
             if (errorPort)
             {
-                while (MessageBox.Show("Error establishing Bluetooth connection. Retry?", "Error!", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+                while (MessageBox.Show("Error establishing Bluetooth connection. Retry?",
+                    "Error!", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == System.Windows.Forms.DialogResult.Yes)
                 {
                     try
                     {

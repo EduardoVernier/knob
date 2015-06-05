@@ -38,6 +38,7 @@
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(214, 23);
             this.progressBar.TabIndex = 0;
+            this.progressBar.UseWaitCursor = true;
             // 
             // infoText
             // 
@@ -46,16 +47,23 @@
             this.infoText.Size = new System.Drawing.Size(213, 23);
             this.infoText.TabIndex = 1;
             this.infoText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.infoText.UseWaitCursor = true;
             // 
             // StartingDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(238, 137);
+            this.ControlBox = false;
             this.Controls.Add(this.infoText);
             this.Controls.Add(this.progressBar);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "StartingDialog";
-            this.Text = "StartingDialog";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.TopMost = true;
+            this.UseWaitCursor = true;
             this.ResumeLayout(false);
 
         }

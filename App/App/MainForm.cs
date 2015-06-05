@@ -20,7 +20,7 @@ namespace App
         Thread ReadThread;
         Thread InitThread;
 
-        ConcurrentQueue<String> buffer;
+        List<String> buffer;
         Mapping currentMapping;
         StartingDialog dialog = new StartingDialog();
 
@@ -30,7 +30,7 @@ namespace App
         {
             InitializeComponent();
 
-            buffer = new ConcurrentQueue<string>();
+            buffer = new List<String>();
             SenderThread = new Thread(UseKeyBuffer);
             ReadThread = new Thread(ReadFromArduino);
         }
@@ -39,12 +39,12 @@ namespace App
         {
             while (true)
             {
-                if (buffer.Count == 0) { Thread.Sleep(1000); continue; }
-                string result;
-                if (buffer.TryDequeue(out result))
-                    SendKeys.SendWait(result);
+                if (buffer.Count == 0) { Console.WriteLine("Empty buffer."); Thread.Sleep(200); continue; }
+                string result = buffer[0];
+                SendKeys.SendWait(result);
+                buffer.RemoveAt(0);
                 Application.DoEvents();
-                Thread.Sleep(200);
+                Thread.Sleep(100);
             }
         }
 
@@ -139,8 +139,14 @@ namespace App
                     try
                     {
                         EventType val = (EventType)Enum.Parse(typeof(EventType), sp.ReadByte().ToString());
+                        Console.WriteLine("Got byte from arduino");
                         string action = currentMapping.GetAction(val);
-                        if (action != null) buffer.Enqueue(action);
+                        Console.WriteLine("Action: {0}", action);
+                        if (action != null)
+                        {
+                            Console.WriteLine("Enqueuing action {0}", action);
+                            buffer.Add(action);
+                        }
                     }
                     catch (ArgumentException)
                     {
@@ -148,7 +154,7 @@ namespace App
                     }
                 }
                 Application.DoEvents();
-                Thread.Sleep(1000);
+                Thread.Sleep(200);
             }
         }
 

@@ -6,3 +6,12 @@ C:\Users\Samsung\Documents\GitHub\knob\App\App\bin\Release\App.pdb
 C:\Users\Samsung\Documents\GitHub\knob\App\App\obj\Release\App.Properties.Resources.resources
 C:\Users\Samsung\Documents\GitHub\knob\App\App\obj\Release\App.exe
 C:\Users\Samsung\Documents\GitHub\knob\App\App\obj\Release\App.pdb
+C:\Users\Alister\Documents\GitHub\knob\App\App\bin\Release\App.exe.config
+C:\Users\Alister\Documents\GitHub\knob\App\App\obj\Release\App.exe
+C:\Users\Alister\Documents\GitHub\knob\App\App\obj\Release\App.pdb
+C:\Users\Alister\Documents\GitHub\knob\App\App\bin\Release\App.exe
+C:\Users\Alister\Documents\GitHub\knob\App\App\bin\Release\App.pdb
+C:\Users\Alister\Documents\GitHub\knob\App\App\obj\Release\App.csprojResolveAssemblyReference.cache
+C:\Users\Alister\Documents\GitHub\knob\App\App\obj\Release\App.MainForm.resources
+C:\Users\Alister\Documents\GitHub\knob\App\App\obj\Release\App.Properties.Resources.resources
+C:\Users\Alister\Documents\GitHub\knob\App\App\obj\Release\App.csproj.GenerateResource.Cache

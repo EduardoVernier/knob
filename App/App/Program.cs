@@ -51,10 +51,7 @@ namespace App
             ShowConsoleWindow();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Form1 f = new Form1();
-            Application.Run(f);
-            
-        
+            Application.Run(new MainForm());
         }
     }
 }

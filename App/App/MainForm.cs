@@ -24,7 +24,7 @@ namespace App
         Mapping currentMapping;
         StartingDialog dialog = new StartingDialog();
 
-        string[] mappings;
+        public List<Mapping> Mappings { get; private set; }
 
         public MainForm()
         {
@@ -89,21 +89,23 @@ namespace App
             {
                 dialog.LabelText = "Loading mappings...";
                 dialog.Progress = 75;
-                mappings = Mapping.GetAvailableMappings();
+                string[] mappings = Mapping.GetAvailableMappings();
+                this.Mappings = new List<Mapping>();
+                foreach (string m in mappings)
+                {
+                    this.Mappings.Add(new Mapping(m));
+                }
+                this.mappingComboBox.DataSource = Mappings;
                 Thread.Sleep(1000);
                 dialog.LabelText = "Done!";
                 dialog.Progress = 100;
                 Thread.Sleep(1000);
                 dialog.CallClose();
             }
-            foreach (string s in mappings)
+
+            if (Mappings.Count != 0)
             {
-                this.textBox1.Text += s + '\n';
-                
-            }
-            if (mappings.Length != 0)
-            {
-                currentMapping = new Mapping(mappings[0]);
+                currentMapping = Mappings[0];
             }
             if (errorPort)
             {
@@ -122,6 +124,7 @@ namespace App
                     break;
                 }
             }
+            
             base.OnShown(e);
         }
 
@@ -136,7 +139,6 @@ namespace App
                     try
                     {
                         EventType val = (EventType)Enum.Parse(typeof(EventType), sp.ReadByte().ToString());
-                        Console.WriteLine("Got value: {0}", val);
                         string action = currentMapping.GetAction(val);
                         if (action != null) buffer.Enqueue(action);
                     }
@@ -150,15 +152,15 @@ namespace App
             }
         }
 
-        public void AppendToTextbox(char b)
+        private void mappingComboBox_SelectedValueChanged(object sender, EventArgs e)
         {
-            textBox1.Text += b.ToString();
+            ComboBox cb = sender as ComboBox;
+            if (cb != null)
+            {
+                this.currentMapping = (Mapping) cb.SelectedItem;
+            }
         }
 
-        public void AppendToTextbox(String s)
-        {
-            textBox1.Text += s;
-        }
         /*
         private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {

@@ -13,7 +13,7 @@ namespace App
     /// There is a Mapping for each App we support (and the users can create mappings)
     /// The mapping transforms the event that comes from the Arduino to a Keystroke.
     /// </summary>
-    class Mapping
+    public class Mapping
     {
         public String AppName { get; private set; }
 
@@ -24,6 +24,11 @@ namespace App
             this.AppName = appName;
             this.mapping = new Dictionary<EventType, string>();
             this.Load();
+        }
+
+        public static Mapping ByName(String name)
+        {
+            return new Mapping(name);
         }
 
         public static string[] GetAvailableMappings()

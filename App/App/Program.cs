@@ -49,6 +49,7 @@ namespace App
         static void Main()
         {
             ShowConsoleWindow();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());

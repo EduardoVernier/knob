@@ -31,7 +31,8 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.mappingComboBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnModifyMapping = new System.Windows.Forms.Button();
+            this.btnCreateMapping = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -52,9 +53,10 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.button1);
-            this.splitContainer1.Size = new System.Drawing.Size(284, 262);
-            this.splitContainer1.SplitterDistance = 208;
+            this.splitContainer1.Panel2.Controls.Add(this.btnCreateMapping);
+            this.splitContainer1.Panel2.Controls.Add(this.btnModifyMapping);
+            this.splitContainer1.Size = new System.Drawing.Size(284, 135);
+            this.splitContainer1.SplitterDistance = 69;
             this.splitContainer1.TabIndex = 0;
             // 
             // mappingComboBox
@@ -77,20 +79,31 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Aplicativo:";
             // 
-            // button1
+            // btnModifyMapping
             // 
-            this.button1.Location = new System.Drawing.Point(197, 14);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnModifyMapping.Location = new System.Drawing.Point(12, 14);
+            this.btnModifyMapping.Name = "btnModifyMapping";
+            this.btnModifyMapping.Size = new System.Drawing.Size(88, 36);
+            this.btnModifyMapping.TabIndex = 0;
+            this.btnModifyMapping.Text = "Modificar atalhos";
+            this.btnModifyMapping.UseVisualStyleBackColor = true;
+            this.btnModifyMapping.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // btnCreateMapping
+            // 
+            this.btnCreateMapping.Location = new System.Drawing.Point(184, 14);
+            this.btnCreateMapping.Name = "btnCreateMapping";
+            this.btnCreateMapping.Size = new System.Drawing.Size(88, 36);
+            this.btnCreateMapping.TabIndex = 1;
+            this.btnCreateMapping.Text = "Cadastrar novo aplicativo";
+            this.btnCreateMapping.UseVisualStyleBackColor = true;
+            this.btnCreateMapping.Click += new System.EventHandler(this.btnCreateMapping_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
+            this.ClientSize = new System.Drawing.Size(284, 135);
             this.Controls.Add(this.splitContainer1);
             this.Name = "MainForm";
             this.Text = "knob";
@@ -108,7 +121,8 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.ComboBox mappingComboBox;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnModifyMapping;
+        private System.Windows.Forms.Button btnCreateMapping;
 
     }
 }

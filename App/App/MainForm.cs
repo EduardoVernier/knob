@@ -63,17 +63,17 @@ namespace App
             bool errorPort = false;
             InitThread = new Thread(ShowInitDialog);
             InitThread.Start();
-            dialog.LabelText = "Opening port...";
+            dialog.LabelText = "Conectando via Bluetooth...";
             Thread.Sleep(1000);
             try
             {
-                sp.Open();
                 dialog.Progress = 20;
+                sp.Open();
             }
             catch (SystemException)
             {
-                dialog.LabelText = "Error opening port!";
-                Thread.Sleep(1000);
+                dialog.LabelText = "Erro na conexão!";
+                Thread.Sleep(750);
                 errorPort = true;
             }
             if (sp.IsOpen)
@@ -81,23 +81,17 @@ namespace App
                 SenderThread.Start();
                 ReadThread.Start();
                 Console.WriteLine("Port COM3 is open.");
-                dialog.LabelText = "Port opened.";
+                dialog.LabelText = "Conexão bem-sucedida.";
                 dialog.Progress = 50;
             }
             Thread.Sleep(1000);
             if (dialog.Visible)
             {
-                dialog.LabelText = "Loading mappings...";
+                dialog.LabelText = "Carregando perfis...";
                 dialog.Progress = 75;
-                string[] mappings = Mapping.GetAvailableMappings();
-                this.Mappings = new List<Mapping>();
-                foreach (string m in mappings)
-                {
-                    this.Mappings.Add(new Mapping(m));
-                }
-                this.mappingComboBox.DataSource = Mappings;
+                ReloadMappings();
                 Thread.Sleep(1000);
-                dialog.LabelText = "Done!";
+                dialog.LabelText = "Pronto!";
                 dialog.Progress = 100;
                 Thread.Sleep(1000);
                 dialog.CallClose();
@@ -109,7 +103,7 @@ namespace App
             }
             if (errorPort)
             {
-                while (MessageBox.Show("Error establishing Bluetooth connection. Retry?",
+                while (MessageBox.Show("Erro de conexão bluetooth. Tentar novamente?",
                     "Error!", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == System.Windows.Forms.DialogResult.Yes)
                 {
                     try
@@ -132,19 +126,14 @@ namespace App
         {
             while (true)
             {
-                if (!sp.IsOpen) { Thread.Sleep(2000); continue; }
-                Console.WriteLine("Checking for incoming data....");
                 while (sp.BytesToRead > 0)
                 {
                     try
                     {
                         EventType val = (EventType)Enum.Parse(typeof(EventType), sp.ReadByte().ToString());
-                        Console.WriteLine("Got byte from arduino");
                         string action = currentMapping.GetAction(val);
-                        Console.WriteLine("Action: {0}", action);
                         if (action != null)
                         {
-                            Console.WriteLine("Enqueuing action {0}", action);
                             buffer.Add(action);
                         }
                     }
@@ -167,23 +156,30 @@ namespace App
             }
         }
 
-        /*
-        private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("Received data!");
-            switch (e.EventType)
-            {
-                case SerialData.Chars:
-                    AppendToTextbox(e.ToString());
-                    break;
-                
-            }
+            ModifyMapping win = new ModifyMapping(currentMapping);
+            win.ShowDialog();
+            ReloadMappings();
         }
 
-        private void serialPort1_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
+        private void ReloadMappings()
         {
-            
-            Console.WriteLine("received error wtf");
-        }*/
+            string[] mappings = Mapping.GetAvailableMappings();
+            this.Mappings = new List<Mapping>();
+            foreach (string m in mappings)
+            {
+                this.Mappings.Add(Mapping.ByName(m));
+            }
+            this.mappingComboBox.DataSource = Mappings;
+        }
+
+        private void btnCreateMapping_Click(object sender, EventArgs e)
+        {
+            ModifyMapping win = new ModifyMapping();
+            win.ShowDialog();
+            ReloadMappings();
+        }
+
     }
 }

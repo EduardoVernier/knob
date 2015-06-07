@@ -19,16 +19,21 @@ namespace App
 
         private Dictionary<EventType, String> mapping;
 
+        public Mapping()
+            : this("")
+        { }
+
         public Mapping(String appName)
         {
             this.AppName = appName;
             this.mapping = new Dictionary<EventType, string>();
-            this.Load();
         }
 
         public static Mapping ByName(String name)
         {
-            return new Mapping(name);
+            Mapping m = new Mapping(name);
+            m.Load();
+            return m;
         }
 
         public static string[] GetAvailableMappings()
@@ -95,18 +100,18 @@ namespace App
             }
         }
 
-        public void SaveToFile()
+        public bool SaveToFile()
         {
             string path = @"config\";
             path += AppName.ToLower().Replace(' ', '_') + ".conf";
             if (File.Exists(path))
             {
                 // TODO ask for overwriting
-                DialogResult result = MessageBox.Show("Confirme", "Já existe uma configuração com este nome, deseja substituir?", MessageBoxButtons.YesNo);
+                DialogResult result = MessageBox.Show("Já existe uma configuração com este nome, deseja substituir?", "Confirme", MessageBoxButtons.YesNo);
                 switch (result)
                 {
                     case DialogResult.No:
-                        return;
+                        return false;
                     case DialogResult.Yes:
                         break;
                 }
@@ -120,6 +125,7 @@ namespace App
                 }
                 sw.Flush();
             }
+            return true;
         }
 
         public String GetAction(EventType ev)
@@ -134,7 +140,9 @@ namespace App
 
         public void AddAction(EventType t, String command)
         {
-            mapping.Add(t, command);
+            if (mapping.Keys.Contains<EventType>(t))
+                mapping[t] = command;
+            else mapping.Add(t, command);
         }
     }
 

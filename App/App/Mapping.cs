@@ -38,9 +38,20 @@ namespace App
 
         public static string[] GetAvailableMappings()
         {
-            string[] files = Directory.GetFiles("config");
+            string[] files;
+            try
+            {
+                files = Directory.GetFiles("config");
+            }
+            catch (DirectoryNotFoundException)
+            {
+                Directory.CreateDirectory("config");
+                return new string[] { };
+            }
+            
+            files = new string[] { };
             List<String> mappings = new List<string>();
-            Regex mappingNameRegex = new Regex(@"^[\w\d_]+$");
+            Regex mappingNameRegex = new Regex(@"^[\w\d ]+$");
             foreach (string filename in files)
             {
                 using (StreamReader sr = new StreamReader(filename))

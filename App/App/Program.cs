@@ -48,7 +48,7 @@ namespace App
         [STAThread]
         static void Main()
         {
-            ShowConsoleWindow();
+            // ShowConsoleWindow();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

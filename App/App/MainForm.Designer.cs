@@ -42,6 +42,7 @@
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.IsSplitterFixed = true;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -62,6 +63,7 @@
             // mappingComboBox
             // 
             this.mappingComboBox.DisplayMember = "AppName";
+            this.mappingComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.mappingComboBox.FormattingEnabled = true;
             this.mappingComboBox.Location = new System.Drawing.Point(116, 13);
             this.mappingComboBox.Name = "mappingComboBox";
@@ -105,6 +107,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 135);
             this.Controls.Add(this.splitContainer1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "knob";
             this.splitContainer1.Panel1.ResumeLayout(false);

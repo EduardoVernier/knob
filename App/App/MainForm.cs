@@ -10,12 +10,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Collections.Concurrent;
+using System.IO;
 
 namespace App
 {
     public partial class MainForm : Form
     {
-        public static SerialPort sp = new SerialPort("COM3", 9600);
+        public static SerialPort sp;
         Thread SenderThread;
         Thread ReadThread;
         Thread InitThread;
@@ -23,6 +24,7 @@ namespace App
         List<String> buffer;
         Mapping currentMapping;
         StartingDialog dialog = new StartingDialog();
+        private string port;
 
         public List<Mapping> Mappings { get; private set; }
 
@@ -33,6 +35,20 @@ namespace App
             buffer = new List<String>();
             SenderThread = new Thread(UseKeyBuffer);
             ReadThread = new Thread(ReadFromArduino);
+            try
+            {
+                using (StreamReader s = new StreamReader("port.txt"))
+                {
+                    this.port = s.ReadLine();
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Especifique a porta para usar:");
+                String s = Console.ReadLine();
+                this.port = s;
+            }
+            sp = new SerialPort(this.port, 9600);
         }
 
         private void UseKeyBuffer()

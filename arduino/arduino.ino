@@ -19,6 +19,7 @@ boolean doubleClick = false;
 // interrupt service routine vars
 boolean A_set = false;
 boolean B_set = false;
+
 void setup() {
   pinMode(encoderPinA, INPUT_PULLUP); // new method of enabling pullups
   pinMode(encoderPinB, INPUT_PULLUP);
@@ -66,7 +67,7 @@ void loop() {
     }
     
     if (doubleClick)
-      Serial.print((char)1);
+      Serial.print((char)5);
     else
       Serial.print((char)4);
     
@@ -89,8 +90,7 @@ void doEncoderA(){
     if ( A_set && !B_set )
     {
       encoderPos += 1;
-      Serial.print((char)2);
-      //Serial.print("2");
+      Serial.print((char)1);
     }
     rotating = false;  // no more debouncing until loop() hits again
   }
@@ -105,7 +105,7 @@ void doEncoderB(){
     if( B_set && !A_set )
     {
       encoderPos -= 1;
-      Serial.print((char)3);
+      Serial.print((char)2);
     }
     rotating = false;
   }

@@ -6,7 +6,6 @@ C:\Users\Samsung\Documents\GitHub\knob\App\App\bin\Debug\App.exe
 C:\Users\Samsung\Documents\GitHub\knob\App\App\bin\Debug\App.pdb
 C:\Users\Samsung\Documents\GitHub\knob\App\App\obj\Debug\App.exe
 C:\Users\Samsung\Documents\GitHub\knob\App\App\obj\Debug\App.pdb
-C:\Users\Samsung\Documents\GitHub\knob\App\App\obj\Debug\App.Form1.resources
 C:\Users\Alister\Documents\GitHub\knob\App\App\bin\Debug\App.exe.config
 C:\Users\Alister\Documents\GitHub\knob\App\App\obj\Debug\App.exe
 C:\Users\Alister\Documents\GitHub\knob\App\App\obj\Debug\App.pdb
@@ -17,4 +16,5 @@ C:\Users\Alister\Documents\GitHub\knob\App\App\obj\Debug\App.MainForm.resources
 C:\Users\Alister\Documents\GitHub\knob\App\App\obj\Debug\App.Properties.Resources.resources
 C:\Users\Alister\Documents\GitHub\knob\App\App\obj\Debug\App.csproj.GenerateResource.Cache
 C:\Users\Alister\Documents\GitHub\knob\App\App\obj\Debug\App.StartingDialog.resources
-C:\Users\Alister\Documents\GitHub\knob\App\App\obj\Debug\App.ModifyMapping.resources
+C:\Users\Samsung\Documents\GitHub\knob\App\App\obj\Debug\App.MainForm.resources
+C:\Users\Samsung\Documents\GitHub\knob\App\App\obj\Debug\App.StartingDialog.resources

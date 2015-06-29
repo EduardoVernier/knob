@@ -49,7 +49,6 @@ namespace App
                 return new string[] { };
             }
             
-            files = new string[] { };
             List<String> mappings = new List<string>();
             Regex mappingNameRegex = new Regex(@"^[\w\d ]+$");
             foreach (string filename in files)
